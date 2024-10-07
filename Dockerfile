@@ -15,4 +15,4 @@ EXPOSE 5000
 
 # Command to run the Selenium script or the website (adjust based on your project)
 # For example, to run Selenium tests
-CMD ["python", "test_selenium_script.py"]
+CMD ["python", "test.py"]
