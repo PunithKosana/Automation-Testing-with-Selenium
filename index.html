@@ -6,21 +6,42 @@
     <title>Project Status</title>
 </head>
 <body>
-    <h1>Project Status</h1>
+    <h1> Project Status</h1>
 
     <p><strong>Build:</strong> <img id="build-badge" src="" alt="Build Status"></p>
     <p><strong>Tests:</strong> <img id="test-badge" src="" alt="Test Status"></p>
 
     <script>
-        function getBranchName() {
-            const path = window.location.pathname.split('/');
-            return path.length > 2 ? path[2] : 'main'; // Default to "main" if no branch is detected
+        async function getBranchName() {
+            try {
+                const repo = "PunithKosana/Automation-Testing-with-Selenium";  // Replace with your actual repository
+                const response = await fetch(`https://api.github.com/repos/${repo}/branches`);
+                const branches = await response.json();
+
+                // Detect the branch from the URL path (GitHub UI)
+                const urlPath = window.location.pathname.split('/');
+                const branchIndex = urlPath.indexOf('tree');
+
+                if (branchIndex !== -1 && urlPath[branchIndex + 1]) {
+                    return urlPath[branchIndex + 1];  // Extract branch name from URL
+                }
+
+                return "main"; // Default to main branch if not found
+            } catch (error) {
+                console.error("Error fetching branch:", error);
+                return "main"; // Fallback to main branch
+            }
         }
 
-        const branch = getBranchName();
-        document.getElementById("build-badge").src = `https://img.shields.io/github/actions/workflow/status/PunithKosana/Automation-Testing-with-Selenium/static.yml?branch=main&event=push&label=Build`;
+        async function updateBadges() {
+            const branch = await getBranchName();
 
-        document.getElementById("test-badge").src = `https://img.shields.io/github/actions/workflow/status/jalantechnologies/boilerplate-mern/.github/workflows/preview_on_pr_update.yml?branch=${branch}&label=Tests&job=checks`;
+            document.getElementById("build-badge").src = `https://img.shields.io/github/actions/workflow/status/jalantechnologies/boilerplate-mern/.github/workflows/preview_on_pr_update.yml?branch=${branch}&label=Build&job=build`;
+
+            document.getElementById("test-badge").src = `https://img.shields.io/github/actions/workflow/status/jalantechnologies/boilerplate-mern/.github/workflows/preview_on_pr_update.yml?branch=${branch}&label=Tests&job=checks`;
+        }
+
+        updateBadges();
     </script>
 </body>
 </html>
