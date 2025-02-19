@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo</title>
+    <title>Project Status</title>
 </head>
 <body>
-    <h1>Welcome to My Website!</h1>
-    <p>Automation Testing with Selenium</p>
+    <h1>Project Status</h1>
+
+    <p><strong>Build:</strong> <img id="build-badge" src="" alt="Build Status"></p>
+    <p><strong>Tests:</strong> <img id="test-badge" src="" alt="Test Status"></p>
+
+    <script>
+        function getBranchName() {
+            const path = window.location.pathname.split('/');
+            return path.length > 2 ? path[2] : 'main'; // Default to "main" if no branch is detected
+        }
+
+        const branch = getBranchName();
+        document.getElementById("build-badge").src = `https://img.shields.io/github/actions/workflow/status/jalantechnologies/boilerplate-mern/.github/workflows/preview_on_pr_update.yml?branch=${branch}&label=Build&job=build`;
+
+        document.getElementById("test-badge").src = `https://img.shields.io/github/actions/workflow/status/jalantechnologies/boilerplate-mern/.github/workflows/preview_on_pr_update.yml?branch=${branch}&label=Tests&job=checks`;
+    </script>
 </body>
 </html>
-
